@@ -44,7 +44,8 @@ const deleteItem = (req, res) => {
       );
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND).send({ message: err.message });
-      } else if (err.name === "CastError") {
+      }
+      if (err.name === "CastError") {
         return res.status(BAD_REQUEST_STATUS).send({ message: err.message });
       }
       return res
@@ -83,7 +84,8 @@ const likeItem = (req, res) => {
       );
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND).send({ message: err.message });
-      } else if (err.name === "CastError") {
+      }
+      if (err.name === "CastError") {
         return res.status(BAD_REQUEST_STATUS).send({ message: err.message });
       }
       return res
@@ -106,7 +108,8 @@ const dislikeItem = (req, res) => {
       );
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND).send({ message: err.message });
-      } else if (err.name === "CastError") {
+      }
+      if (err.name === "CastError") {
         return res.status(BAD_REQUEST_STATUS).send({ message: err.message });
       }
       return res
