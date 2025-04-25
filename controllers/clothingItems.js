@@ -1,9 +1,13 @@
 const ClothingItem = require("../models/clothingItem");
-const { BAD_REQUEST_STATUS, NOT_FOUND } = require("../utils/errors");
+const {
+  BAD_REQUEST_STATUS,
+  NOT_FOUND,
+  SERVER_ERROR,
+} = require("../utils/errors");
 
 const getItems = (req, res) => {
   ClothingItem.find({})
-    .then((clothingItems) => res.status(200).send(clothingItems))
+    .then((clothingItems) => res.send(clothingItems))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
@@ -12,7 +16,7 @@ const getItems = (req, res) => {
         return res.status(NOT_FOUND).send({ message: err.message });
       }
       return res
-        .status(500)
+        .status(SERVER_ERROR)
         .send({ message: "An error has occurred on the server" });
     });
 };
@@ -29,7 +33,7 @@ const createItem = (req, res) => {
         return res.status(BAD_REQUEST_STATUS).send({ message: err.message });
       }
       return res
-        .status(500)
+        .status(SERVER_ERROR)
         .send({ message: "An error has occurred on the server" });
     });
 };
@@ -37,7 +41,7 @@ const createItem = (req, res) => {
 const deleteItem = (req, res) => {
   ClothingItem.findByIdAndDelete(req.params.id)
     .orFail()
-    .then((clothingItem) => res.status(200).send(clothingItem))
+    .then((clothingItem) => res.send(clothingItem))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
@@ -49,7 +53,7 @@ const deleteItem = (req, res) => {
         return res.status(BAD_REQUEST_STATUS).send({ message: err.message });
       }
       return res
-        .status(500)
+        .status(SERVER_ERROR)
         .send({ message: "An error has occurred on the server" });
     });
 };
@@ -58,14 +62,14 @@ const getItemById = (req, res) => {
   ClothingItem.findById(req.params.id)
     .orFail()
     .then((item) => {
-      res.status(200).send(item);
+      res.send(item);
     })
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       return res
-        .status(500)
+        .status(SERVER_ERROR)
         .json({ message: "An error has occurred on the server" });
     });
 };
@@ -77,7 +81,7 @@ const likeItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then((clothingItem) => res.status(200).send(clothingItem))
+    .then((clothingItem) => res.send(clothingItem))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
@@ -89,7 +93,7 @@ const likeItem = (req, res) => {
         return res.status(BAD_REQUEST_STATUS).send({ message: err.message });
       }
       return res
-        .status(500)
+        .status(SERVER_ERROR)
         .send({ message: "An error has occurred on the server" });
     });
 };
@@ -101,7 +105,7 @@ const dislikeItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then((clothingItem) => res.status(200).send(clothingItem))
+    .then((clothingItem) => res.send(clothingItem))
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
@@ -113,7 +117,7 @@ const dislikeItem = (req, res) => {
         return res.status(BAD_REQUEST_STATUS).send({ message: err.message });
       }
       return res
-        .status(500)
+        .status(SERVER_ERROR)
         .send({ message: "An error has occurred on the server" });
     });
 };
