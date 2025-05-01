@@ -1,23 +1,24 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const auth = require("./middlewares/auth");
 const { NOT_FOUND } = require("./utils/errors");
 
 const { PORT = 3001 } = process.env;
 
 const app = express();
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: "68091ec940de0d6a1bd97e5d",
-  };
-  next();
-});
-
-app.use("/users", require("./routes/users"));
-app.use("/items", require("./routes/clothingItems"));
+app.use("/", require("./routes/index"));
+app.use("/", require("./routes/index"));
+app.use("/", require("./routes/users"));
+app.use("/", auth, require("./routes/clothingItems"));
 
 app.use((req, res) => {
   res.status(NOT_FOUND).send({ message: "Page not found" });

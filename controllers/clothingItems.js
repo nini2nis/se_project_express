@@ -3,6 +3,7 @@ const {
   BAD_REQUEST_STATUS,
   NOT_FOUND,
   SERVER_ERROR,
+  FORBIDDEN,
 } = require("../utils/errors");
 
 const getItems = (req, res) => {
@@ -39,9 +40,17 @@ const createItem = (req, res) => {
 };
 
 const deleteItem = (req, res) => {
-  ClothingItem.findByIdAndDelete(req.params.id)
+  ClothingItem.findById(req.params.id)
     .orFail()
-    .then((clothingItem) => res.send(clothingItem))
+    .then((clothingItem) => {
+      if (clothingItem.owner.equals(req.user._id)) {
+        return ClothingItem.findByIdAndDelete(req.params.id);
+      }
+      return res.status(FORBIDDEN).send({ message: "Not authorized" });
+    })
+    .then((clothingItem) => {
+      res.send(clothingItem);
+    })
     .catch((err) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
