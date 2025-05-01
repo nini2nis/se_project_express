@@ -24,11 +24,20 @@ const getUsers = (req, res) => {
 };
 
 const getCurrentUser = (req, res) => {
+  console.log("getCurrentUser function called");
   const userId = req.user._id;
+  console.log("Request user object:", req.user);
+  console.log("Attempting to find user with ID:", userId);
   User.findById(userId)
     .orFail()
-    .then((user) => res.send(user))
+    .then((user) => {
+      console.log("Found user:", user);
+      console.log("User name:", user.name); // Add this
+      console.log("Full user object:", JSON.stringify(user, null, 2)); // Add this
+      res.status(200).send(user);
+    })
     .catch((err) => {
+      console.error("Full error object:", err);
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );

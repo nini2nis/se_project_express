@@ -3,14 +3,7 @@ const auth = require("../middlewares/auth");
 
 const { getCurrentUser, updateProfile } = require("../controllers/users");
 
-router.get("/me", auth, getCurrentUser);
-router.patch("/me", auth, updateProfile);
+router.get("/users/me", auth, getCurrentUser);
+router.patch("/users/me", auth, updateProfile);
 
 module.exports = router;
-
-// .then((user) => {
-//   if (!user) {
-//     return Promise.reject(new Error("Error"));
-//   }
-//   return user;
-// }
