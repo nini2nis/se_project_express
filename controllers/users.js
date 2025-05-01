@@ -24,20 +24,13 @@ const getUsers = (req, res) => {
 };
 
 const getCurrentUser = (req, res) => {
-  console.log("getCurrentUser function called");
   const userId = req.user._id;
-  console.log("Request user object:", req.user);
-  console.log("Attempting to find user with ID:", userId);
   User.findById(userId)
     .orFail()
     .then((user) => {
-      console.log("Found user:", user);
-      console.log("User name:", user.name); // Add this
-      console.log("Full user object:", JSON.stringify(user, null, 2)); // Add this
       res.status(200).send(user);
     })
     .catch((err) => {
-      console.error("Full error object:", err);
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
@@ -123,7 +116,7 @@ const login = (req, res) => {
       .status(BAD_REQUEST_STATUS)
       .send({ message: "A valid email and password is required" });
   }
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
