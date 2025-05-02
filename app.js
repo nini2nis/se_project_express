@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const auth = require("./middlewares/auth");
 const { NOT_FOUND } = require("./utils/errors");
 
 const { PORT = 3001 } = process.env;
@@ -14,7 +13,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 
 app.use("/", require("./routes/index"));
 app.use("/", require("./routes/users"));
-app.use("/", auth, require("./routes/clothingItems"));
+app.use("/", require("./routes/clothingItems"));
 
 app.use((req, res) => {
   res.status(NOT_FOUND).send({ message: "Page not found" });

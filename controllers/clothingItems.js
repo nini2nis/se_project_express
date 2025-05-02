@@ -13,7 +13,7 @@ const getItems = (req, res) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
-      if (err.name === "") {
+      if (err.name === "DocumentNotFound") {
         return res.status(NOT_FOUND).send({ message: err.message });
       }
       return res

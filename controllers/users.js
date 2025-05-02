@@ -10,25 +10,12 @@ const {
   UNAUTHORIZED,
 } = require("../utils/errors");
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.send(users))
-    .catch((err) => {
-      console.error(
-        `Error ${err.name} with the message ${err.message} has occurred while executing the code`
-      );
-      return res
-        .status(SERVER_ERROR)
-        .send({ message: "An error has occurred on the server" });
-    });
-};
-
 const getCurrentUser = (req, res) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail()
     .then((user) => {
-      res.status(200).send(user);
+      res.send({ user });
     })
     .catch((err) => {
       console.error(
@@ -91,7 +78,7 @@ const updateProfile = (req, res) => {
     { name, avatar },
     { new: true, runValidators: true }
   )
-    .orFail(() => new Error("UserNotFound"))
+    .orFail()
     .then((user) => res.send(user))
     .catch((err) => {
       console.error(
@@ -127,8 +114,13 @@ const login = (req, res) => {
       console.error(
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
-      return res.status(UNAUTHORIZED).send({ message: err.message });
+      if (err.message === "Incorrect email or password") {
+        return res.status(UNAUTHORIZED).send({ message: err.message });
+      }
+      return res
+        .status(SERVER_ERROR)
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
-module.exports = { getUsers, getCurrentUser, createUser, updateProfile, login };
+module.exports = { getCurrentUser, createUser, updateProfile, login };
