@@ -1,7 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { errors } = require("celebrate");
 const cors = require("cors");
-const { NOT_FOUND } = require("./utils/errors");
+
+const { requestLogger, errorLogger } = require("./middlewares/logger");
+const errorHandler = require("./middlewares/error-handler");
+const { NotFoundError } = require("./utils/errors");
 
 const { PORT = 3001 } = process.env;
 
@@ -11,13 +15,19 @@ app.use(cors());
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 
+app.use(requestLogger);
+
 app.use("/", require("./routes/index"));
 app.use("/", require("./routes/users"));
 app.use("/", require("./routes/clothingItems"));
 
 app.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: "Page not found" });
+  throw new NotFoundError("Not found");
 });
+
+app.use(errorLogger);
+app.use(errors());
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
