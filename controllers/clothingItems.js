@@ -7,6 +7,7 @@ const {
 } = require("../utils/errors");
 
 const getItems = (req, res, next) => {
+  console.log("GET /items endpoint hit");
   ClothingItem.find({})
     .then((clothingItems) => res.send(clothingItems))
     .catch((err) => {

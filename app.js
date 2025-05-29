@@ -11,8 +11,21 @@ const { NotFoundError } = require("./utils/errors");
 const { PORT = 3001 } = process.env;
 
 const app = express();
+
+app.use(
+  cors({
+    origin: [
+      "https://www.wtwr.webmakers.ch",
+      "https://wtwr.webmakers.ch",
+      "http://localhost:3000",
+    ],
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
-app.use(cors());
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 
