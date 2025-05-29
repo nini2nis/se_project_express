@@ -33,7 +33,8 @@ const createItem = (req, res, next) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       if (err.name === "ValidationError") {
-        throw new BadRequestError("Please enter a valid input");
+        next(new BadRequestError("Please enter a valid input"));
+        //throw new BadRequestError("Please enter a valid input");
       } else {
         next(err);
       }
