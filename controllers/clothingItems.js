@@ -23,7 +23,9 @@ const getItems = (req, res, next) => {
 };
 
 const createItem = (req, res, next) => {
+  console.log("Received req.body:", req.body);
   const { name, weather, imageUrl } = req.body;
+  console.log("Extracted values:", { name, weather, imageUrl });
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((clothingItem) => res.status(201).send(clothingItem))
     .catch((err) => {
