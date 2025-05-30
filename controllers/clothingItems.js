@@ -7,7 +7,6 @@ const {
 } = require("../utils/errors");
 
 const getItems = (req, res, next) => {
-  console.log("GET /items endpoint hit");
   ClothingItem.find({})
     .then((clothingItems) => res.send(clothingItems))
     .catch((err) => {
@@ -23,9 +22,7 @@ const getItems = (req, res, next) => {
 };
 
 const createItem = (req, res, next) => {
-  console.log("Received req.body:", req.body);
   const { name, weather, imageUrl } = req.body;
-  console.log("Extracted values:", { name, weather, imageUrl });
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((clothingItem) => res.status(201).send(clothingItem))
     .catch((err) => {
@@ -33,8 +30,8 @@ const createItem = (req, res, next) => {
         `Error ${err.name} with the message ${err.message} has occurred while executing the code`
       );
       if (err.name === "ValidationError") {
-        next(new BadRequestError("Please enter a valid input"));
-        //throw new BadRequestError("Please enter a valid input");
+        //next(new BadRequestError("Please enter a valid input")); //Dot suggestion
+        throw new BadRequestError("Please enter a valid input");
       } else {
         next(err);
       }
