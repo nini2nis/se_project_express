@@ -43,7 +43,7 @@ module.exports.validateSignupBody = celebrate({
     }),
     password: Joi.string()
       .required()
-      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+      .pattern(/^[a-zA-Z0-9]{3,30}$/)
       .messages({
         "string.empty": 'The "password" field must be filled in',
         "string.pattern.base":
@@ -69,7 +69,7 @@ module.exports.validateSigninBody = celebrate({
     }),
     password: Joi.string()
       .required()
-      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+      .pattern(/^[a-zA-Z0-9]{3,30}$/)
       .messages({
         "string.empty": 'The "password" field must be filled in',
         "string.pattern.base":

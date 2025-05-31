@@ -44,7 +44,7 @@ const deleteItem = (req, res, next) => {
       if (clothingItem.owner.equals(req.user._id)) {
         return ClothingItem.findByIdAndDelete(req.params.id);
       }
-      next(new ForbiddenError("Unauthorized"));
+      return next(new ForbiddenError("Unauthorized"));
     })
     .then((clothingItem) => {
       res.send(clothingItem);

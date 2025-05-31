@@ -3,6 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { errors } = require("celebrate");
 const cors = require("cors");
+const { rateLimit } = require("express-rate-limit");
+const helmet = require("helmet");
 
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const errorHandler = require("./middlewares/error-handler");
@@ -10,7 +12,17 @@ const { NotFoundError } = require("./utils/errors");
 
 const { PORT = 3001 } = process.env;
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+});
+
 const app = express();
+
+app.use(helmet());
+app.use(limiter);
 
 app.use(
   cors({
@@ -35,14 +47,15 @@ app.get("/crash-test", () => {
   setTimeout(() => {
     throw new Error("Server will crash now");
   }, 0);
-}); //remove this app.get after review
+});
+/* remove above app.get after review */
 
 app.use("/", require("./routes/index"));
 app.use("/", require("./routes/users"));
 app.use("/", require("./routes/clothingItems"));
 
-app.use((req, res) => {
-  throw new NotFoundError("Not found");
+app.use((_req, _res, next) => {
+  next(new NotFoundError("Not found"));
 });
 
 app.use(errorLogger);

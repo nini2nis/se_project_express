@@ -1,3 +1,10 @@
+/* eslint-disable max-classes-per-file */
+
+// for REVIEWER: the above solution was suggested to me
+// instead of creating individual error files since they
+// are all related. But I can go with your approach if
+// you prefer.
+
 class BadRequestError extends Error {
   constructor(message) {
     super(message);
