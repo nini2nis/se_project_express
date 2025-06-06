@@ -8,7 +8,7 @@ const helmet = require("helmet");
 
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const errorHandler = require("./middlewares/error-handler");
-const { NotFoundError } = require("./utils/error-NotFound");
+const { NotFoundError } = require("./utils/error-NotFound.js");
 
 const { PORT = 3001 } = process.env;
 
